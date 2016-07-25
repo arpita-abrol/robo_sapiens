@@ -1,0 +1,31 @@
+Game Console for the Raspberry Pi 2
+By Arpita Abrol
+
+CONTROLS:
+--JOYSTICK:
+----VCC: pin 4
+----HOR: pin 12, GPIO 18
+----VER: pin 16, GPIO 23
+----SEL: pin 18, GPIO 24
+----GND: pin 6
+--LEFT BUTTON:
+----PIN: pin 7, GPIO 4
+----GND: pin 9
+--RIGHT BUTTON:
+----PIN: pin 32, GPIO 12
+----GND: pin 30
+--UP BUTTON:
+----PIN: pin 36, GPIO 16
+----GND: pin 34
+--DOWN BUTTON:
+----PIN: pin 37, GPIO 26
+----GND: pin 39
+
+ALT: all GND pins connected on protoboard and put into one GND pin [pin 6]
+
+GAME:
+1. Pong adaptation.
+Coded in Python 2 using Rpi.GPIO and pygame
+
+HOW TO PLAY:
+Using the LEFT and RIGHT buttons, move your paddle to hit the ball.
