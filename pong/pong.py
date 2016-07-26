@@ -84,6 +84,20 @@ def checkEdges(ball, Xdir, Ydir):
         Xdir *= -1
     return Xdir, Ydir
 
+#moves the opponents paddle
+def ai(ball,Xdir,paddle):
+    if Xdir < 0:
+        if paddle.centery < HEIGHT/2:
+            paddle.y += 1
+        elif paddle.centery > HEIGHT/2:
+            paddle.y -= 1
+    elif Xdir > 0:
+        if paddle2.centery < ball.centery:
+            paddle2.y += 1
+        else:
+            paddle2.y -= 1
+    return paddle
+
 def main():
     #basic setup stuff
     pygame.init()
@@ -140,6 +154,8 @@ def main():
 
         ball = moveBall(ball,ballDirX,ballDirY)
         ballDirX, ballDirY = checkEdges(ball,ballDirX,ballDirY)
+
+        paddle2 = ai(ball,ballDirX,paddle2)
                     
         pygame.display.update()
         FPSCLOCK.tick(FPS)
