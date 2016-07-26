@@ -70,6 +70,12 @@ def drawPaddle(paddle):
 def drawBall(ball):
     pygame.draw.rect(DISPLAYSURF,WHITE,ball)
 
+#moves the ball
+def moveBall(ball,Xdir,Ydir):
+    ball.x += Xdir
+    ball.y += Ydir
+    return ball
+
 def main():
     #basic setup stuff
     pygame.init()
@@ -96,6 +102,13 @@ def main():
     drawPaddle(paddleOne)   #draws user's paddle
     drawPaddle(paddleTwo)   #draws AI's paddle
     drawBall(ball)          #draws ball
+
+    #ball directions:
+    ##X-axis: -1 = left, 1 = righ
+    ##Y-axis: -1 = up, 1 = down
+    ballDirX = -1
+    ballDirY = -1
+
     
     while True:     #PONG game loop
         for action in pygame.event.get():
@@ -112,6 +125,8 @@ def main():
         drawPaddle(paddleOne)   #draws user's paddle
         drawPaddle(paddleTwo)   #draws AI's paddle
         drawBall(ball)          #draws ball
+
+        ball = moveBall(ball,ballDirX,ballDirY)
                     
         pygame.display.update()
         FPSCLOCK.tick(FPS)
