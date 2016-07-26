@@ -76,6 +76,14 @@ def moveBall(ball,Xdir,Ydir):
     ball.y += Ydir
     return ball
 
+#checks if the ball collides with top, bottom, paddles
+def checkEdges(ball, Xdir, Ydir):
+    if ball.top <= THICK or ball.bottom >= HEIGHT-THICK:
+        Ydir *= -1
+    if ball.left == THICK or ball.right == WIDTH-THICK:
+        Xdir *= -1
+    return Xdir, Ydir
+
 def main():
     #basic setup stuff
     pygame.init()
@@ -127,6 +135,7 @@ def main():
         drawBall(ball)          #draws ball
 
         ball = moveBall(ball,ballDirX,ballDirY)
+        ballDirX, ballDirY = checkEdges(ball,ballDirX,ballDirY)
                     
         pygame.display.update()
         FPSCLOCK.tick(FPS)
