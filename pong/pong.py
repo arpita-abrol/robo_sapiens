@@ -21,7 +21,8 @@ FPS = 200
 WIDTH = 400
 HEIGHT = 300
 THICK = 10
-PADDLESIDE = 50
+PADDLESIZE = 50
+PADDLEOFF = 20
 ##input vars
 LEFT = 7     #pin 7
 RIGHT = 32   #pin 32
@@ -36,39 +37,82 @@ WHITE = (255,255,255)
 
 #Methods
 
-#sets up the window for the game
-def setup():
+#sets up the GPIO controls for the game
+def GPIOsetup():
     #GPIO SETUP
     GPIO.setmode(GPIO.BOARD)     #Numbers GPIOs by physical location aka pin num
     GPIO.setup(LEFT, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(RIGHT, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(SEL, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    global PRESSL
-    pressL = GPIO.input(7)
-    global PRESSR
-    pressR = GPIO.input(32)
-    global PRESSS
-    pressS = GPIO.input(18)
+    global PRESS_L
+    PRESS_L = GPIO.input(7)
+    global PRESS_R
+    PRESS_R = GPIO.input(32)
+    global PRESS_S
+    PRESS_S = GPIO.input(18)
+
+#sets up the game background
+def setup():
     #BACKGROUND SETUP
     DISPLAYSURF.fill(BLACK)
-    pygame.draw.rect(DISPLAYSURF,WHITE,((0,0),(WIDTH,HEIGHT)),20)
+    pygame.draw.rect(DISPLAYSURF,WHITE,((0,0),(WIDTH,HEIGHT)),THICK*2)
+    pygame.draw.line(DISPLAYSURF,WHITE,((WIDTH/2),0),((WIDTH/2),HEIGHT),THICK/4)
 
+#draws the paddles and ensure they stay within game limits
+def drawPaddle(paddle):
+    if paddle.bottom > HEIGHT - THICK:
+        paddle.bottom = HEIGHT - THICK
+    elif paddle.top < THICK:
+        paddle.top = THICK
+    pygame.draw.rect(DISPLAYSURF,WHITE,paddle)
+
+#draws the ball
+def drawBall(ball):
+    pygame.draw.rect(DISPLAYSURF,WHITE,ball)
 
 def main():
+    #basic setup stuff
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
     global DISPLAYSURF
     DISPLAYSURF = pygame.display.set_mode((WIDTH,HEIGHT))
     pygame.display.set_caption('Robo Pong')
 
-    setup()
+    GPIOsetup()
+
+    #setup starting pos
+    ballX = (WIDTH - THICK)/2
+    ballY = (HEIGHT - THICK)/2
+    playerOnePos = (HEIGHT - PADDLESIZE)/2
+    playerTwoPos = (HEIGHT - PADDLESIZE)/2
+
+    #setup paddles, ball
+    paddleOne = pygame.Rect(PADDLEOFF,playerOnePos,THICK,PADDLESIZE)
+    paddleTwo = pygame.Rect(WIDTH-PADDLEOFF-THICK,playerTwoPos,THICK,PADDLESIZE)
+    ball = pygame.Rect(ballX, ballY, THICK, THICK)
+
+    #place paddles, ball initially
+    setup()                 #draws background
+    drawPaddle(paddleOne)   #draws user's paddle
+    drawPaddle(paddleTwo)   #draws AI's paddle
+    drawBall(ball)          #draws ball
     
     while True:     #PONG game loop
         for action in pygame.event.get():
             if action.type == KEYDOWN:
-                if (not PRESSS):     #if select button pressed, initiate quit
+                if (not PRESS_S):     #if select button pressed, initiate quit
                     pygame.quit()    #later: add high score screen
                     sys.exit()
+        if not PRESS_S:
+            pygame.quit()
+            sys.exit()
+
+        #place paddles, ball- updating version
+        setup()                 #draws background
+        drawPaddle(paddleOne)   #draws user's paddle
+        drawPaddle(paddleTwo)   #draws AI's paddle
+        drawBall(ball)          #draws ball
+                    
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
