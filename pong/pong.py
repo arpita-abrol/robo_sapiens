@@ -127,6 +127,10 @@ def main():
         if not PRESS_S:
             pygame.quit()
             sys.exit()
+        elif not PRESS_R:
+            paddle1.y += 10
+        elif not PRESS_L:
+            paddle1.y -= 10
 
         #place paddles, ball- updating version
         setup()                 #draws background
