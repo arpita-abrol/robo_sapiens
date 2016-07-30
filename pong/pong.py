@@ -24,7 +24,9 @@ PADDLESIDE = 50
 
 #GPIO SETUP
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(
+#GPIO.setup()
+# Args: setup(channel #, input/output)
+# More info here: https://sourceforge.net/p/raspberry-gpio-python/wiki/BasicUsage/
 
 #Methods
 
