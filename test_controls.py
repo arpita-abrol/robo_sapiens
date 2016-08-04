@@ -1,17 +1,18 @@
 #Arpita Abrol
 #Systems Test for the Raspberry Pi 2 Game Console
+#see overview.txt for all pin positions
 
 import RPi.GPIO as GPIO
 import pygame, sys
 from pygame import *
 
 #GLobal Variables
-
+##buttons
 LEFT = 7     #pin 7
 RIGHT = 32   #pin 32
 UP = 36      #pin 36
 DOWN = 37    #pin 37
-
+##joystick
 HOR = 12     #pin 12
 VER = 16     #pin 16
 SEL = 18     #pin 18
